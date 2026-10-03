@@ -17,13 +17,15 @@ import {
  * Voorbeeldcatalogus voor de demonstratie.
  *
  * Alle productmerken zijn fictief. Prijzen en voorraad zijn voorbeeldwaarden.
- * Productbeelden zijn gegenereerde illustraties (zie /demo-images), zodat er
+ * Productbeelden zijn 3D-renders (zie scripts/product-renders), zodat er
  * geen beeldmateriaal van derden wordt gebruikt.
  */
 
-/** Soorten illustraties die de demo-afbeeldingsroute kan tekenen. */
+/** Soorten productopnamen die scripts/product-renders kan maken. */
 export type DemoImageKind =
-  | "case"
+  | "hardcase"
+  | "silicone"
+  | "leather"
   | "clear"
   | "book"
   | "wallet"
@@ -49,6 +51,22 @@ export type DemoImageKind =
   | "powerbank"
   | "minipack";
 
+/** Beschrijving van één productopname, gebruikt door scripts/product-renders. */
+export type DemoImageSpec = {
+  kind: DemoImageKind;
+  brand: string;
+  color: string;
+  view: number;
+  magsafe?: boolean;
+  big?: boolean;
+};
+
+/** Bestandsnaam van een opname in public/products. */
+export function demoImageFile(spec: DemoImageSpec): string {
+  const flags = `${spec.magsafe ? "-m" : ""}${spec.big ? "-xl" : ""}`;
+  return `${spec.kind}-${spec.brand}-${spec.color.slice(1)}${flags}-${spec.view}.webp`;
+}
+
 type Def = {
   handle: string;
   title: string;
@@ -66,6 +84,8 @@ type Def = {
   price: Cents;
   compareAtPrice?: Cents;
   image: DemoImageKind;
+  /** Grotere variant van het model (bv. 20.000 mAh). */
+  imageBig?: boolean;
   /** Toestel-ID's voor toestelgebonden producten. */
   devices?: string[];
   colors?: string[];
@@ -77,6 +97,15 @@ type Def = {
   lowStock?: Record<string, number>;
   tags?: string[];
 };
+
+/** Alle opnamen die de voorbeeldcatalogus gebruikt, per bestandsnaam. */
+export const demoImageSpecs = new Map<string, DemoImageSpec>();
+
+function registerImage(spec: DemoImageSpec): string {
+  const file = demoImageFile(spec);
+  demoImageSpecs.set(file, spec);
+  return file;
+}
 
 function imagesFor(def: Def): { images: ProductImage[]; indexByKey: Map<string, number> } {
   const images: ProductImage[] = [];
@@ -92,12 +121,19 @@ function imagesFor(def: Def): { images: ProductImage[]; indexByKey: Map<string, 
       indexByKey.set(`${brand}|${color}`, images.length);
       for (const view of [1, 2]) {
         images.push({
-          url: `/demo-images/${def.image}_${brand}_${hex}_${view}.svg`,
-          alt: [def.title, def.colors ? color : null, view === 2 ? "andere kant" : null]
+          url: `/products/${registerImage({
+            kind: def.image,
+            brand,
+            color: `#${hex}`,
+            view,
+            magsafe: def.magsafe && brand !== "samsung",
+            big: def.imageBig,
+          })}`,
+          alt: [def.title, def.colors ? color : null, view === 2 ? "ander aanzicht" : null]
             .filter(Boolean)
             .join(" – "),
-          width: 800,
-          height: 800,
+          width: 1000,
+          height: 1000,
         });
       }
     }
@@ -228,7 +264,7 @@ const defs: Def[] = [
     createdAt: "2026-09-12",
     featured: true,
     price: 3495,
-    image: "case",
+    image: "silicone",
     devices: ["iphone-17-pro", "iphone-17", "iphone-16-pro", "iphone-16", "iphone-15"],
     colors: ["Zwart", "Marineblauw", "Salie", "Zand"],
     soldOut: ["iphone-17-pro|Zand", "iphone-16|Salie", "iphone-15|Marineblauw"],
@@ -277,7 +313,7 @@ const defs: Def[] = [
     compatibility: deviceCompat,
     createdAt: "2026-04-21",
     price: 1995,
-    image: "case",
+    image: "hardcase",
     devices: ["galaxy-s25-ultra", "galaxy-s25", "galaxy-s24", "galaxy-a56"],
     colors: ["Zwart", "Blauw", "Groen"],
     soldOut: ["galaxy-a56|Groen"],
@@ -350,7 +386,7 @@ const defs: Def[] = [
     createdAt: "2026-09-29",
     featured: true,
     price: 4995,
-    image: "case",
+    image: "leather",
     devices: ["iphone-17-pro-max", "iphone-17-pro", "iphone-air"],
     colors: ["Cognac", "Zwart", "Donkergroen"],
     soldOut: ["iphone-air|Donkergroen"],
@@ -397,7 +433,7 @@ const defs: Def[] = [
     compatibility: deviceCompat,
     createdAt: "2026-08-30",
     price: 3995,
-    image: "case",
+    image: "hardcase",
     devices: ["iphone-air"],
     colors: ["Zwart", "Titanium"],
   },
@@ -420,7 +456,7 @@ const defs: Def[] = [
     compatibility: deviceCompat,
     createdAt: "2026-03-18",
     price: 1795,
-    image: "case",
+    image: "silicone",
     devices: ["galaxy-s25", "galaxy-s24", "galaxy-a56"],
     colors: ["Lavendel", "Zwart", "Mint"],
     soldOut: ["galaxy-s24|Mint", "galaxy-s24|Lavendel"],
@@ -1028,6 +1064,7 @@ const defs: Def[] = [
     createdAt: "2026-06-25",
     price: 4995,
     image: "powerbank",
+    imageBig: true,
     colors: ["Grijs"],
     lowStock: { Grijs: 4 },
   },

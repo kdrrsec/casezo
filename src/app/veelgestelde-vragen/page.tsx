@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ContentPage } from "@/components/ui/content-page";
-import { Placeholder } from "@/components/ui/placeholder";
+import { Placeholder, showOwnerNotes } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 
 export const metadata: Metadata = { title: "Veelgestelde vragen" };
 
-type Faq = { q: string; a: React.ReactNode };
+type Faq = { q: string; a: React.ReactNode; ownerTodo?: boolean };
 
 const groups: { title: string; items: Faq[] }[] = [
   {
@@ -71,6 +71,7 @@ const groups: { title: string; items: Faq[] }[] = [
       {
         q: "Welke betaalmethoden kan ik gebruiken?",
         a: <Placeholder>beschikbare betaalmethoden (worden ingesteld in Shopify Payments of de gekozen betaalprovider).</Placeholder>,
+        ownerTodo: true,
       },
       {
         q: "Wanneer wordt mijn bestelling verzonden?",
@@ -83,6 +84,7 @@ const groups: { title: string; items: Faq[] }[] = [
       {
         q: "Kan ik mijn bestelling nog wijzigen?",
         a: <Placeholder>beleid voor het wijzigen of annuleren van bestellingen.</Placeholder>,
+        ownerTodo: true,
       },
     ],
   },
@@ -99,7 +101,7 @@ export default function FaqPage() {
         <section key={group.title}>
           <h2>{group.title}</h2>
           <div className="divide-y divide-line rounded-md border border-line">
-            {group.items.map((item) => (
+            {group.items.filter((item) => !item.ownerTodo || showOwnerNotes).map((item) => (
               <details key={item.q} className="group">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3.5 font-semibold text-ink [&::-webkit-details-marker]:hidden">
                   {item.q}

@@ -25,39 +25,39 @@ export default async function HomePage() {
     const lead = inCategory.find((p) => p.featured) ?? inCategory[0];
     return { category, count: inCategory.length, image: lead?.images[0] };
   });
-  const bannerImages = featured
-    .map((p) => p.image)
-    .filter((img): img is NonNullable<typeof img> => Boolean(img))
-    .slice(0, 3);
 
   return (
     <div className="space-y-12 pb-4 lg:space-y-16">
       {/* 1. Promotiebanner */}
       <section className="container-shop pt-4 lg:pt-6">
-        <div className="grid items-center overflow-hidden rounded-lg bg-primary text-white md:grid-cols-[1.2fr_1fr]">
-          <div className="px-6 py-7 lg:px-10 lg:py-9">
-            <h1 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl">
+        <div className="grid items-center overflow-hidden rounded-lg bg-[#e8f1f3] md:grid-cols-[1fr_1.15fr]">
+          <div className="px-6 py-8 lg:px-12 lg:py-10">
+            <p className="text-sm font-semibold tracking-wide text-primary uppercase">Hoesjes en accessoires</p>
+            <h1 className="mt-2 text-[1.75rem] leading-tight font-bold tracking-tight text-ink sm:text-[2.125rem]">
               Accessoires die bij jouw telefoon passen
             </h1>
-            <p className="mt-2 max-w-md text-[0.9375rem] text-white/85">
+            <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-ink-soft">
               Hoesjes, screenprotectors, opladers en meer, geselecteerd op het exacte model van je toestel.
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link href="/categorie/telefoonhoesjes" className="btn bg-white text-primary hover:bg-white/90">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/categorie/telefoonhoesjes" className="btn btn-primary h-11 px-5">
                 Bekijk het assortiment
                 <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
               </Link>
-              <a href="#toestelkeuze" className="btn border border-white/40 text-white hover:bg-white/10">
+              <a href="#toestelkeuze" className="btn btn-secondary h-11 px-5">
                 Kies je toestel
               </a>
             </div>
           </div>
-          <div className="hidden h-full grid-cols-3 gap-2 p-4 md:grid lg:p-5">
-            {bannerImages.map((img) => (
-              <div key={img.url} className="relative aspect-[3/4] overflow-hidden rounded-md bg-white">
-                <Image src={img.url} alt="" fill sizes="15vw" className="object-contain p-2" />
-              </div>
-            ))}
+          <div className="relative aspect-[14/9] w-full">
+            <Image
+              src="/products/hero.webp"
+              alt="Telefoonhoesjes in verschillende kleuren en materialen"
+              fill
+              priority
+              sizes="(min-width: 768px) 55vw, 100vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
@@ -94,7 +94,7 @@ export default async function HomePage() {
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 15vw, (min-width: 640px) 30vw, 45vw"
-                      className="object-contain p-3 transition-transform group-hover:scale-[1.03]"
+                      className="object-contain transition-transform group-hover:scale-[1.03]"
                     />
                   )}
                 </div>

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
 import { ContentPage } from "@/components/ui/content-page";
-import { Placeholder } from "@/components/ui/placeholder";
+import Link from "next/link";
+
+import { Placeholder, showOwnerNotes } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 
-export const metadata: Metadata = { title: "Algemene voorwaarden (concept)", robots: { index: false } };
+export const metadata: Metadata = { title: "Algemene voorwaarden", robots: { index: false } };
 
 const sections = [
   { title: "Identiteit van de ondernemer", todo: "bedrijfsnaam, adres, KvK-nummer, btw-nummer en contactgegevens." },
@@ -28,11 +30,19 @@ export default function TermsPage() {
         Dit is een conceptopzet, geen definitieve juridische tekst. Laat de algemene voorwaarden opstellen of
         controleren voordat de winkel live gaat.
       </Placeholder>
+      {!showOwnerNotes && (
+        <p>
+          Onze algemene voorwaarden worden binnenkort op deze pagina gepubliceerd. Heb je een vraag over een bestelling?{" "}
+          <Link href="/contact" className="link">Neem contact met ons op</Link>.
+        </p>
+      )}
       {sections.map((s, i) => (
         <section key={s.title}>
-          <h2>
-            Artikel {i + 1}. {s.title}
-          </h2>
+          {showOwnerNotes && (
+            <h2>
+              Artikel {i + 1}. {s.title}
+            </h2>
+          )}
           <Placeholder>{s.todo}</Placeholder>
         </section>
       ))}

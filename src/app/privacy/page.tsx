@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
 import { ContentPage } from "@/components/ui/content-page";
-import { Placeholder } from "@/components/ui/placeholder";
+import Link from "next/link";
+
+import { Placeholder, showOwnerNotes } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 
-export const metadata: Metadata = { title: "Privacyverklaring (concept)", robots: { index: false } };
+export const metadata: Metadata = { title: "Privacyverklaring", robots: { index: false } };
 
 const sections = [
   { title: "Wie is verantwoordelijk", todo: "naam, adres en contactgegevens van de verwerkingsverantwoordelijke." },
@@ -27,11 +29,24 @@ export default function PrivacyPage() {
         Dit is een conceptopzet, geen definitieve juridische tekst. Laat de privacyverklaring opstellen of controleren
         voordat de winkel live gaat.
       </Placeholder>
+      <h2>Cookies en lokale opslag</h2>
+      <p>
+        Deze website gebruikt een functionele cookie om je winkelmand te onthouden en lokale opslag in je browser om het
+        toestel te onthouden dat je hebt gekozen. Deze gegevens worden niet gebruikt voor advertenties.
+      </p>
+      {!showOwnerNotes && (
+        <p>
+          De volledige privacyverklaring wordt binnenkort op deze pagina gepubliceerd. Heb je nu een vraag over je
+          gegevens? <Link href="/contact" className="link">Neem contact met ons op</Link>.
+        </p>
+      )}
       {sections.map((s, i) => (
         <section key={s.title}>
-          <h2>
-            {i + 1}. {s.title}
-          </h2>
+          {showOwnerNotes && (
+            <h2>
+              {i + 1}. {s.title}
+            </h2>
+          )}
           <Placeholder>{s.todo}</Placeholder>
         </section>
       ))}

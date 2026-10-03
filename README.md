@@ -45,7 +45,7 @@ dus links zijn deelbaar en de terugknop werkt.
 
 ```
 src/
-  app/                    Routes (Server Components), /api/cart, /demo-images
+  app/                    Routes (Server Components) en /api/cart
   components/             UI; client components alleen waar interactie nodig is
   config/store.ts         Winkelgegevens (contact, bedrijf, verzending, retour)
   lib/catalog/            Centrale cataloguslaag
@@ -117,9 +117,25 @@ afrekenen gaat via `checkoutUrl`.
 - **Logo**: `public/brand/casezo-logo.png` (transparant, gebruikt in header en footer via
   `src/components/layout/logo.tsx`). Het favicon (`src/app/icon.png`, `src/app/apple-icon.png`) is de "C" uit het logo.
 
+## Productbeelden van de voorbeeldcatalogus
+
+De voorbeeldproducten hebben fotorealistische 3D-renders (studiolicht, siliconen, leer, transparant, glas), gemaakt
+per toestelmerk en kleur. Ze staan in `public/products/` en worden gemaakt met `scripts/product-renders/`:
+
+```bash
+npx tsx scripts/product-renders/specs.ts > /tmp/specs.json            # alle opnamen
+npx tsx scripts/product-renders/specs.ts --missing > /tmp/specs.json  # alleen ontbrekende
+node scripts/product-renders/render.mjs /tmp/specs.json
+```
+
+Met Shopify gebruikt de winkel automatisch de productfoto's uit Shopify. Leveranciers en merken stellen vaak
+officiële productfoto's beschikbaar; gebruik die alleen als je er toestemming voor hebt.
+
 ## Nog in te vullen door de eigenaar
 
-Alles in `src/config/store.ts` dat `null` is, wordt op de website gemarkeerd als **Nog in te vullen**:
+Alles in `src/config/store.ts` dat `null` is, wordt tijdens ontwikkeling (`npm run dev`) gemarkeerd als
+**Nog in te vullen**. Op de live site worden ontbrekende gegevens weggelaten in plaats van gemarkeerd; zet
+`NEXT_PUBLIC_SHOW_OWNER_NOTES=1` om de markeringen ook online te zien. Het gaat om:
 contactgegevens, bedrijfsgegevens (KvK, btw, adres), verzendkosten en -proces, retourbeleid. De privacyverklaring en
 algemene voorwaarden zijn bewust alleen een opzet; laat ze juridisch opstellen of controleren.
 

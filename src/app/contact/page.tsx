@@ -1,7 +1,9 @@
+import { Mail, Phone } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { ContentPage } from "@/components/ui/content-page";
-import { ConfigValue, Placeholder } from "@/components/ui/placeholder";
+import { InfoList, Placeholder } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 import { storeConfig } from "@/config/store";
 
@@ -9,66 +11,64 @@ export const metadata: Metadata = { title: "Contact" };
 
 export default function ContactPage() {
   const { contact, company } = storeConfig;
-  const missing = !contact.email && !contact.phone;
   return (
     <ContentPage
       title="Contact"
-      intro="Heb je een vraag over een product, je bestelling of welk accessoire bij je telefoon past? Neem gerust contact op."
+      intro="Heb je een vraag over een product, je bestelling of welk accessoire bij je telefoon past? We helpen je graag."
       breadcrumbs={[{ label: "Klantenservice", href: "/klantenservice" }, { label: "Contact" }]}
       aside={<ServiceNav current="/contact" />}
     >
-      {missing && (
+      {(contact.email || contact.phone) && (
+        <div className="not-prose mb-6 grid gap-3 sm:grid-cols-2">
+          {contact.email && (
+            <a href={`mailto:${contact.email}`} className="flex items-center gap-3 rounded-md border border-line p-4 hover:border-primary">
+              <Mail className="size-5 text-primary" strokeWidth={1.75} aria-hidden />
+              <span>
+                <span className="block text-sm text-muted">E-mail</span>
+                <span className="font-semibold">{contact.email}</span>
+              </span>
+            </a>
+          )}
+          {contact.phone && (
+            <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="flex items-center gap-3 rounded-md border border-line p-4 hover:border-primary">
+              <Phone className="size-5 text-primary" strokeWidth={1.75} aria-hidden />
+              <span>
+                <span className="block text-sm text-muted">Telefoon</span>
+                <span className="font-semibold">{contact.phone}</span>
+              </span>
+            </a>
+          )}
+        </div>
+      )}
+      {!contact.email && !contact.phone && (
         <Placeholder>
           e-mailadres en/of telefoonnummer voor klantvragen. Vul deze in via <code>src/config/store.ts</code>.
         </Placeholder>
       )}
-      <h2>Bereikbaarheid</h2>
-      <dl className="grid grid-cols-[8rem_1fr] gap-y-2 text-sm">
-        <dt className="font-medium">E-mail</dt>
-        <dd>
-          {contact.email ? (
-            <a className="link" href={`mailto:${contact.email}`}>
-              {contact.email}
-            </a>
-          ) : (
-            <ConfigValue value={null} label="e-mailadres" />
-          )}
-        </dd>
-        <dt className="font-medium">Telefoon</dt>
-        <dd>
-          <ConfigValue value={contact.phone} label="telefoonnummer" />
-        </dd>
-        <dt className="font-medium">Openingstijden</dt>
-        <dd>
-          <ConfigValue value={contact.hours} label="openingstijden klantenservice" />
-        </dd>
-      </dl>
 
-      <h2>Bedrijfsgegevens</h2>
-      <dl className="grid grid-cols-[8rem_1fr] gap-y-2 text-sm">
-        <dt className="font-medium">Naam</dt>
-        <dd>
-          <ConfigValue value={company.legalName} label="officiële bedrijfsnaam" />
-        </dd>
-        <dt className="font-medium">Adres</dt>
-        <dd>
-          <ConfigValue value={company.address} label="vestigingsadres" />
-        </dd>
-        <dt className="font-medium">KvK-nummer</dt>
-        <dd>
-          <ConfigValue value={company.kvk} label="KvK-nummer" />
-        </dd>
-        <dt className="font-medium">Btw-nummer</dt>
-        <dd>
-          <ConfigValue value={company.vat} label="btw-identificatienummer" />
-        </dd>
-      </dl>
+      {contact.hours && (
+        <>
+          <h2>Bereikbaarheid</h2>
+          <p>{contact.hours}</p>
+        </>
+      )}
 
-      <h2>Tip: vermeld je bestelling en toestel</h2>
+      <h2>Voordat je contact opneemt</h2>
       <p>
-        Gaat je vraag over een bestelling, vermeld dan je bestelnummer. Twijfel je of een product past? Noem dan het
-        exacte model van je telefoon, bijvoorbeeld &quot;iPhone 16 Pro&quot; of &quot;Galaxy S25 Ultra&quot;.
+        Gaat je vraag over een bestelling, vermeld dan je bestelnummer. Twijfel je of een product past? Noem het exacte
+        model van je telefoon, bijvoorbeeld &quot;iPhone 16 Pro&quot; of &quot;Galaxy S25 Ultra&quot;. Veel antwoorden
+        vind je ook bij de <Link href="/veelgestelde-vragen" className="link">veelgestelde vragen</Link>.
       </p>
+
+      <InfoList
+        title="Bedrijfsgegevens"
+        rows={[
+          { label: "Bedrijfsnaam", value: company.legalName, todo: "officiële bedrijfsnaam" },
+          { label: "Adres", value: company.address, todo: "vestigingsadres" },
+          { label: "KvK-nummer", value: company.kvk, todo: "KvK-nummer" },
+          { label: "Btw-nummer", value: company.vat, todo: "btw-identificatienummer" },
+        ]}
+      />
     </ContentPage>
   );
 }

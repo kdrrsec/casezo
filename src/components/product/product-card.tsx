@@ -17,7 +17,7 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             fill
             priority={priority}
             sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 22vw, (min-width: 640px) 30vw, 48vw"
-            className="object-contain p-2 transition-transform duration-200 group-hover:scale-[1.02]"
+            className="object-contain transition-transform duration-300 group-hover:scale-[1.03]"
           />
         )}
       </div>

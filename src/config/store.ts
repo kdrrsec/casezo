@@ -1,9 +1,10 @@
 /**
  * Winkelgegevens van Casezo.
  *
- * Alles wat `null` is, is nog niet aangeleverd door de eigenaar. De website
- * toont op die plekken een duidelijke markering "Nog in te vullen" in plaats
- * van verzonnen gegevens. Vul hier de echte gegevens in zodra ze bekend zijn.
+ * Alles wat `null` is, is nog niet aangeleverd door de eigenaar. Tijdens
+ * ontwikkeling toont de website daar een markering "Nog in te vullen"; op de
+ * live site wordt het weggelaten. Er worden nooit gegevens verzonnen. Vul hier
+ * de echte gegevens in zodra ze bekend zijn.
  */
 export type StoreConfig = {
   name: string;

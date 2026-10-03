@@ -89,8 +89,7 @@ export function CartView({ shippingNote }: { shippingNote: string | null }) {
               {cart.mode === "demo" && (
                 <p className="mt-3 flex gap-2 text-xs text-ink-soft">
                   <Info className="mt-0.5 size-4 shrink-0 text-primary" strokeWidth={1.75} aria-hidden />
-                  Dit is een demonstratie. Afrekenen wordt beschikbaar zodra de winkel aan Shopify is gekoppeld;
-                  betalingen verlopen dan via de beveiligde Shopify-checkout.
+                  Online afrekenen is binnenkort beschikbaar. Je winkelmand blijft bewaard.
                 </p>
               )}
             </>
@@ -116,7 +115,7 @@ function Line({
   return (
     <li className="flex gap-4 p-4">
       <Link href={`/product/${line.handle}`} className="relative size-20 shrink-0 overflow-hidden rounded border border-line bg-surface sm:size-24">
-        {line.image && <Image src={line.image.url} alt="" fill sizes="96px" className="object-contain p-1" />}
+        {line.image && <Image src={line.image.url} alt="" fill sizes="96px" className="object-contain" />}
       </Link>
       <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:justify-between sm:gap-4">
         <div className="min-w-0">

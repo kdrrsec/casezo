@@ -361,7 +361,7 @@ function Gallery({ images, title }: { images: ProductImage[]; title: string }) {
                   i === active ? "border-primary ring-1 ring-primary" : "border-line hover:border-line-strong"
                 }`}
               >
-                <Image src={img.url} alt="" fill sizes="80px" className="object-contain p-1" />
+                <Image src={img.url} alt="" fill sizes="80px" className="object-contain" />
               </button>
             </li>
           ))}
@@ -374,7 +374,7 @@ function Gallery({ images, title }: { images: ProductImage[]; title: string }) {
           fill
           priority
           sizes="(min-width: 1024px) 45vw, 100vw"
-          className="object-contain p-4"
+          className="object-contain"
         />
       </div>
     </div>
