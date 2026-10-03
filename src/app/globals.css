@@ -6,7 +6,9 @@
  * hover- en lichte tinten worden daar automatisch van afgeleid.
  */
 @theme {
-  --color-primary: #1b3a8c;
+  /* Turquoise-blauw uit het logo ("ZO", ca. #00a8c8), iets donkerder gezet
+     zodat witte tekst op knoppen voldoende contrast heeft (4,9:1, WCAG AA). */
+  --color-primary: #007b96;
   --color-primary-hover: color-mix(in oklab, var(--color-primary) 82%, black);
   --color-primary-soft: color-mix(in oklab, var(--color-primary) 7%, white);
   --color-primary-line: color-mix(in oklab, var(--color-primary) 25%, white);
