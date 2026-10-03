@@ -4,7 +4,7 @@ Nederlandstalige webshop voor telefoonhoesjes en telefoonaccessoires. Gebouwd me
 Tailwind CSS en Lucide-iconen.
 
 Zonder Shopify-configuratie draait de winkel als volledig werkende demonstratie met een lokale voorbeeldcatalogus
-(35 producten van fictieve merken). Met Shopify-configuratie gebruikt dezelfde code de echte catalogus, de Shopify-zoekfunctie,
+(35 producten van bestaande merken zoals Spigen, OtterBox, PanzerGlass, Belkin en Anker; prijzen, voorraad en specificaties zijn voorbeeldwaarden). Met Shopify-configuratie gebruikt dezelfde code de echte catalogus, de Shopify-zoekfunctie,
 de Shopify-winkelmand en de Shopify-checkout. Er is geen eigen betaalverwerking.
 
 ## Snel starten

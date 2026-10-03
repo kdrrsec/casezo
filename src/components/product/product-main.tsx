@@ -115,7 +115,13 @@ export function ProductMain({
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-10">
-      <Gallery key={images[0]?.url ?? "leeg"} images={images} title={product.title} />
+      <Gallery
+        key={images[0]?.url ?? "leeg"}
+        images={images}
+        title={product.title}
+        // Beelden uit de voorbeeldcatalogus zijn renders, geen foto's van het echte product.
+        illustrative={images[0]?.url.startsWith("/products/") ?? false}
+      />
 
       <div>
         <p className="text-sm font-semibold tracking-wide text-muted uppercase">
@@ -338,7 +344,15 @@ function QuantityInput({
   );
 }
 
-function Gallery({ images, title }: { images: ProductImage[]; title: string }) {
+function Gallery({
+  images,
+  title,
+  illustrative,
+}: {
+  images: ProductImage[];
+  title: string;
+  illustrative: boolean;
+}) {
   const [active, setActive] = useState(0);
   const current = images[active] ?? images[0];
 
@@ -376,6 +390,9 @@ function Gallery({ images, title }: { images: ProductImage[]; title: string }) {
           sizes="(min-width: 1024px) 45vw, 100vw"
           className="object-contain"
         />
+        {illustrative && (
+          <p className="absolute right-3 bottom-2 text-xs text-muted">Afbeelding ter illustratie</p>
+        )}
       </div>
     </div>
   );
