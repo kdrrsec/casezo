@@ -114,8 +114,8 @@ afrekenen gaat via `checkoutUrl`.
 ## Huisstijl aanpassen
 
 - **Accentkleur**: wijzig `--color-primary` in `src/app/globals.css`; hover- en lichte tinten worden automatisch afgeleid.
-- **Logo**: vervang de inhoud van `src/components/layout/logo.tsx` door het echte logo, en `src/app/icon.svg` door het
-  favicon.
+- **Logo**: `public/brand/casezo-logo.png` (transparant, gebruikt in header en footer via
+  `src/components/layout/logo.tsx`). Het favicon (`src/app/icon.png`, `src/app/apple-icon.png`) is de "C" uit het logo.
 
 ## Nog in te vullen door de eigenaar
 
