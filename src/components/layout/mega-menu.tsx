@@ -39,7 +39,9 @@ export function MegaMenu({ items }: { items: MenuItem[] }) {
   };
 
   const focusFirstLink = (key: string) => {
-    requestAnimationFrame(() => panels.current.get(key)?.querySelector<HTMLAnchorElement>("a")?.focus());
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => panels.current.get(key)?.querySelector<HTMLAnchorElement>("a")?.focus()),
+    );
   };
 
   const closeAndReturn = (key: string) => {
@@ -124,6 +126,8 @@ export function MegaMenu({ items }: { items: MenuItem[] }) {
                   }
                 }}
               >
+                {/* Inhoud pas opbouwen bij openen: minder werk bij het laden van de pagina. */}
+                {isOpen && (
                 <div className="container-shop py-6">
                   <div className="grid grid-cols-4 gap-x-8 gap-y-6 xl:grid-cols-5">
                     {item.columns.map((column) => (
@@ -155,6 +159,7 @@ export function MegaMenu({ items }: { items: MenuItem[] }) {
                     </Link>
                   </div>
                 </div>
+                )}
               </div>
             </li>
           );

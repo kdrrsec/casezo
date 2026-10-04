@@ -6,7 +6,11 @@ import { ContentPage } from "@/components/ui/content-page";
 import { Placeholder, showOwnerNotes } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 
-export const metadata: Metadata = { title: "Veelgestelde vragen" };
+export const metadata: Metadata = {
+  title: "Veelgestelde vragen",
+  description: "Antwoorden over passende hoesjes, MagSafe, snelladen, kabels en bestellen bij Casezo.",
+  alternates: { canonical: "/veelgestelde-vragen" },
+};
 
 type Faq = { q: string; a: React.ReactNode; ownerTodo?: boolean };
 

@@ -10,7 +10,13 @@ async function findBrand(slug: string) {
 
 export async function generateMetadata({ params }: PageProps<"/merk/[slug]">): Promise<Metadata> {
   const brand = await findBrand((await params).slug);
-  return brand ? { title: `${brand.name} accessoires` } : {};
+  return brand
+    ? {
+        title: `${brand.name} accessoires`,
+        description: `Alle ${brand.name}-producten bij Casezo: bekijk welke accessoires bij jouw toestel passen.`,
+        alternates: { canonical: `/merk/${brand.slug}` },
+      }
+    : {};
 }
 
 export default async function BrandPage({ params, searchParams }: PageProps<"/merk/[slug]">) {

@@ -43,7 +43,7 @@ export function DevicePicker() {
         </button>
       </div>
       <div className="max-h-[70vh] overflow-y-auto p-5">
-        <DeviceSelector compact onDone={closePicker} />
+        {pickerOpen && <DeviceSelector compact onDone={closePicker} />}
       </div>
     </dialog>
   );

@@ -7,6 +7,7 @@ import { getCategory, getDeviceMenu, getProductBrands } from "@/lib/catalog";
 export const metadata: Metadata = {
   title: "Merken",
   description: "Accessoires per telefoonmerk en alle productmerken in ons assortiment.",
+  alternates: { canonical: "/merken" },
 };
 
 export default async function BrandsPage() {

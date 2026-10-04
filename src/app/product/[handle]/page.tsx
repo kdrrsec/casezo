@@ -3,11 +3,52 @@ import { notFound } from "next/navigation";
 
 import { ProductGrid } from "@/components/product/product-card";
 import { ProductMain } from "@/components/product/product-main";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { getCategory, getProduct, getProducts, getRelatedProducts } from "@/lib/catalog";
 import { deviceIdsOf, describeRequirements, isCompatible } from "@/lib/catalog/compatibility";
 import { deviceBrands, devices, getDevice } from "@/lib/catalog/devices";
 import type { Device, Product } from "@/lib/catalog/types";
+import { absoluteUrl } from "@/lib/site";
+
+/** Gestructureerde productgegevens (schema.org/Product) voor zoekmachines. */
+function productJsonLd(product: Product) {
+  const prices = product.variants.map((v) => v.price / 100);
+  const low = Math.min(...prices);
+  const high = Math.max(...prices);
+  const available = product.variants.some((v) => v.availableForSale);
+  const url = absoluteUrl(`/product/${product.handle}`);
+  const availability = available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock";
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${product.brand} ${product.title}`,
+    description: product.description,
+    image: product.images.slice(0, 4).map((img) => absoluteUrl(img.url)),
+    brand: { "@type": "Brand", name: product.brand },
+    category: product.productType,
+    ...(product.variants[0]?.sku ? { sku: product.variants[0].sku } : {}),
+    offers:
+      low === high
+        ? {
+            "@type": "Offer",
+            url,
+            price: low.toFixed(2),
+            priceCurrency: "EUR",
+            availability,
+            itemCondition: "https://schema.org/NewCondition",
+          }
+        : {
+            "@type": "AggregateOffer",
+            url,
+            lowPrice: low.toFixed(2),
+            highPrice: high.toFixed(2),
+            offerCount: product.variants.length,
+            priceCurrency: "EUR",
+            availability,
+          },
+  };
+}
 
 export async function generateStaticParams() {
   return (await getProducts()).map((p) => ({ handle: p.handle }));
@@ -19,7 +60,11 @@ export async function generateMetadata({ params }: PageProps<"/product/[handle]"
   return {
     title: `${product.brand} ${product.title}`,
     description: product.description.slice(0, 155),
-    openGraph: { images: product.images[0] ? [{ url: product.images[0].url }] : [] },
+    alternates: { canonical: `/product/${product.handle}` },
+    openGraph: {
+      title: `${product.brand} ${product.title}`,
+      images: product.images[0] ? [{ url: product.images[0].url, alt: product.images[0].alt }] : [],
+    },
   };
 }
 
@@ -59,6 +104,7 @@ export default async function ProductPage({ params, searchParams }: PageProps<"/
 
   return (
     <div className="container-shop pt-4 pb-24 lg:pt-6 lg:pb-8">
+      <JsonLd data={productJsonLd(product)} />
       <Breadcrumbs
         items={[
           { label: category.name, href: `/categorie/${category.slug}` },

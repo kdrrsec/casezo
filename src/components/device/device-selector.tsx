@@ -47,7 +47,7 @@ export function DeviceSelector({ compact = false, onDone }: { compact?: boolean;
                 onClick={() => setPickedBrand(b.slug)}
                 className={`min-w-24 rounded-md border px-4 py-2.5 text-[0.9375rem] font-semibold transition-colors ${
                   active
-                    ? "border-primary bg-primary-soft text-primary"
+                    ? "border-primary bg-primary-soft text-primary-hover"
                     : "border-line-strong bg-white text-ink hover:border-ink-soft"
                 }`}
               >

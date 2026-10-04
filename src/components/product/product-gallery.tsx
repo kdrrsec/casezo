@@ -12,6 +12,12 @@ import type { ProductImage } from "@/lib/catalog/types";
  * - Groter: miniaturen naast de hoofdfoto.
  * - Tik/klik op een foto opent een vergroting met pijltjes en veegbediening.
  */
+/**
+ * Zelfde `sizes` voor de mobiele en de desktopweergave: de browser kiest dan
+ * hetzelfde bestand en downloadt de hoofdfoto maar één keer.
+ */
+const GALLERY_SIZES = "(min-width: 1024px) 45vw, (min-width: 640px) 80vw, 100vw";
+
 export function ProductGallery({
   images,
   title,
@@ -37,13 +43,16 @@ export function ProductGallery({
   };
 
   const caption = illustrative && (
-    <p className="pointer-events-none absolute right-3 bottom-2 text-xs text-muted">Afbeelding ter illustratie</p>
+    <p aria-hidden className="pointer-events-none absolute right-3 bottom-2 text-xs text-muted">
+      Afbeelding ter illustratie
+    </p>
   );
 
   return (
     <div className="lg:sticky lg:top-4 lg:self-start">
       {/* Mobiel: veegbaar */}
       <div className="sm:hidden">
+        <div className="relative">
         <div
           ref={trackRef}
           className="flex snap-x snap-mandatory overflow-x-auto rounded-md border border-line bg-surface [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -66,16 +75,18 @@ export function ProductGallery({
                 src={img.url}
                 alt={img.alt}
                 fill
-                priority={i === 0}
-                sizes="100vw"
+                loading={i === 0 ? "eager" : "lazy"}
+                sizes={GALLERY_SIZES}
+                fetchPriority={i === 0 ? "high" : "auto"}
                 className="object-contain"
               />
-              {caption}
             </button>
           ))}
         </div>
+        {caption}
+        </div>
         {images.length > 1 && (
-          <div className="mt-3 flex justify-center gap-1.5">
+          <div className="mt-1 flex justify-center">
             {images.map((img, i) => (
               <button
                 key={img.url}
@@ -83,8 +94,12 @@ export function ProductGallery({
                 onClick={() => select(i)}
                 aria-label={`Toon foto ${i + 1}`}
                 aria-current={i === active}
-                className={`h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-ink" : "w-1.5 bg-line-strong"}`}
-              />
+                className="flex h-8 min-w-8 items-center justify-center px-1"
+              >
+                <span
+                  className={`block h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-ink" : "w-1.5 bg-line-strong"}`}
+                />
+              </button>
             ))}
           </div>
         )}
@@ -112,10 +127,11 @@ export function ProductGallery({
             ))}
           </ul>
         )}
+        <div className="relative flex-1">
         <button
           type="button"
           onClick={() => setZoomed(true)}
-          className="group relative aspect-square flex-1 cursor-zoom-in overflow-hidden rounded-md border border-line bg-surface"
+          className="group relative block aspect-square w-full cursor-zoom-in overflow-hidden rounded-md border border-line bg-surface"
           aria-label="Foto vergroten"
         >
           <Image
@@ -123,15 +139,16 @@ export function ProductGallery({
             src={current.url}
             alt={current.alt}
             fill
-            priority
-            sizes="(min-width: 1024px) 45vw, 90vw"
+            fetchPriority="high"
+            sizes={GALLERY_SIZES}
             className="animate-[fade-in_200ms_ease-out] object-contain"
           />
           <span className="absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-white/90 text-ink-soft opacity-0 shadow-card transition-opacity group-hover:opacity-100">
             <ZoomIn className="size-4" strokeWidth={2} aria-hidden />
           </span>
-          {caption}
         </button>
+        {caption}
+        </div>
       </div>
 
       {zoomed && (

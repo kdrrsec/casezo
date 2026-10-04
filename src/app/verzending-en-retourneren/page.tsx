@@ -6,7 +6,11 @@ import { InfoList, Placeholder } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 import { storeConfig } from "@/config/store";
 
-export const metadata: Metadata = { title: "Verzending en retourneren" };
+export const metadata: Metadata = {
+  title: "Verzending en retourneren",
+  description: "Hoe je bestelling bij je komt en hoe je een product terugstuurt.",
+  alternates: { canonical: "/verzending-en-retourneren" },
+};
 
 export default function ShippingPage() {
   const { shipping, returns } = storeConfig;

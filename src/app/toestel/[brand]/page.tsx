@@ -11,7 +11,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/toestel/[brand]">): Promise<Metadata> {
   const brand = getDeviceBrand((await params).brand);
-  return brand ? { title: `${brand.name}-accessoires`, description: `Hoesjes en accessoires voor ${brand.name}-telefoons.` } : {};
+  return brand
+    ? {
+        title: `${brand.name}-accessoires`,
+        description: `Hoesjes en accessoires voor ${brand.name}-telefoons.`,
+        alternates: { canonical: `/toestel/${brand.slug}` },
+      }
+    : {};
 }
 
 export default async function PhoneBrandPage({ params, searchParams }: PageProps<"/toestel/[brand]">) {

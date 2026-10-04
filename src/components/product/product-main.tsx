@@ -221,7 +221,7 @@ export function ProductMain({
                       onClick={() => setPicked((p) => ({ ...p, [option.name]: value }))}
                       className={`relative inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                         active
-                          ? "border-primary bg-primary-soft text-primary ring-1 ring-primary"
+                          ? "border-primary bg-primary-soft text-primary-hover ring-1 ring-primary"
                           : "border-line-strong bg-white text-ink hover:border-ink-soft"
                       } ${state === "soldout" ? "text-muted line-through decoration-1" : ""}`}
                     >

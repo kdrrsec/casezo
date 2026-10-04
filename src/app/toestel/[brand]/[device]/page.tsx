@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/toestel/[brand]/[
   return {
     title: `Accessoires voor ${found.brand.name} ${found.device.name}`,
     description: `Hoesjes, screenprotectors, opladers en meer die passen bij de ${found.device.name}.`,
+    alternates: { canonical: `/toestel/${found.brand.slug}/${found.device.id}` },
   };
 }
 

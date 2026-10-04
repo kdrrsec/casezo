@@ -56,7 +56,10 @@ export function ListingView({
           <FilterPanel facets={result.facets} priceForm={result.priceForm} basePath={basePath} idPrefix="f" />
         </aside>
 
-        <section aria-label="Producten" className="min-w-0">
+        <section aria-labelledby="producten-titel" className="min-w-0">
+          <h2 id="producten-titel" className="sr-only">
+            Producten
+          </h2>
           {showDeviceHint && <DeviceHint basePath={basePath} />}
 
           <div className="mb-4 grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-between">

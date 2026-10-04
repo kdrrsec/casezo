@@ -12,7 +12,6 @@ export function CartButton() {
       type="button"
       onClick={openDrawer}
       className="relative flex items-center gap-2 rounded-md px-2 py-2 text-ink hover:bg-surface lg:px-3"
-      aria-label={`Winkelmand openen, ${count} ${count === 1 ? "artikel" : "artikelen"}`}
       aria-haspopup="dialog"
     >
       <span className="relative">
@@ -27,7 +26,10 @@ export function CartButton() {
           {count}
         </span>
       </span>
-      <span className="hidden text-sm font-semibold lg:inline">Winkelmand</span>
+      <span className="sr-only text-sm font-semibold lg:not-sr-only">Winkelmand</span>
+      <span className="sr-only">
+        , {count} {count === 1 ? "artikel" : "artikelen"}
+      </span>
     </button>
   );
 }

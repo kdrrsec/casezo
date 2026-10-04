@@ -4,7 +4,11 @@ import Link from "next/link";
 
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
-export const metadata: Metadata = { title: "Klantenservice" };
+export const metadata: Metadata = {
+  title: "Klantenservice",
+  description: "Hulp bij je bestelling, verzending, retourneren en het kiezen van het juiste accessoire.",
+  alternates: { canonical: "/klantenservice" },
+};
 
 const tiles = [
   { href: "/contact", icon: Mail, title: "Contact", text: "Stel je vraag rechtstreeks aan ons." },

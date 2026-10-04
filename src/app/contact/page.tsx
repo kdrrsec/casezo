@@ -7,7 +7,11 @@ import { InfoList, Placeholder } from "@/components/ui/placeholder";
 import { ServiceNav } from "@/components/ui/service-nav";
 import { storeConfig } from "@/config/store";
 
-export const metadata: Metadata = { title: "Contact" };
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Neem contact op met Casezo voor vragen over producten, bestellingen of welk accessoire bij je telefoon past.",
+  alternates: { canonical: "/contact" },
+};
 
 export default function ContactPage() {
   const { contact, company } = storeConfig;

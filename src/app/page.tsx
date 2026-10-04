@@ -5,6 +5,9 @@ import Link from "next/link";
 import heroImage from "../../public/brand/hero-accessoires.webp";
 
 import { categoryImages } from "@/config/category-images";
+import { JsonLd } from "@/components/seo/json-ld";
+import { storeConfig } from "@/config/store";
+import { absoluteUrl } from "@/lib/site";
 import { DeviceSelector } from "@/components/device/device-selector";
 import { ProductGrid } from "@/components/product/product-card";
 import {
@@ -31,11 +34,34 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 pb-4 lg:space-y-16">
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: storeConfig.company.legalName ?? storeConfig.name,
+            url: absoluteUrl("/"),
+            logo: absoluteUrl("/brand/casezo-logo.png"),
+            ...(storeConfig.contact.email ? { email: storeConfig.contact.email } : {}),
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: storeConfig.name,
+            url: absoluteUrl("/"),
+            potentialAction: {
+              "@type": "SearchAction",
+              target: { "@type": "EntryPoint", urlTemplate: `${absoluteUrl("/zoeken")}?q={search_term_string}` },
+              "query-input": "required name=search_term_string",
+            },
+          },
+        ]}
+      />
       {/* 1. Promotiebanner */}
       <section className="container-shop pt-4 lg:pt-6">
         <div className="grid items-center overflow-hidden rounded-lg bg-[#e8f1f3] md:grid-cols-[0.85fr_1.15fr]">
           <div className="px-6 pt-8 md:py-10 lg:px-12">
-            <p className="text-sm font-semibold tracking-wide text-primary uppercase">Hoesjes en accessoires</p>
+            <p className="text-sm font-semibold tracking-wide text-primary-hover uppercase">Hoesjes en accessoires</p>
             <h1 className="mt-2 text-[1.75rem] leading-tight font-bold tracking-tight text-ink sm:text-[2.125rem]">
               Accessoires die bij jouw telefoon passen
             </h1>
@@ -56,7 +82,8 @@ export default async function HomePage() {
             <Image
               src={heroImage}
               alt="Telefoonhoesjes, screenprotector, oplader, autohouder, autolader, kabel en oordopjes"
-              priority
+              preload
+              fetchPriority="high"
               quality={90}
               sizes="(min-width: 1280px) 720px, (min-width: 768px) 58vw, 100vw"
               className="h-auto w-full"

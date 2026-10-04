@@ -7,7 +7,16 @@ import type { ProductCardData } from "@/lib/catalog/cards";
 import { Price } from "./price";
 import { StockLabel } from "./stock-label";
 
-export function ProductCard({ product, priority = false }: { product: ProductCardData; priority?: boolean }) {
+export function ProductCard({
+  product,
+  priority = false,
+  highPriority = false,
+}: {
+  product: ProductCardData;
+  priority?: boolean;
+  /** Eerste kaarten boven de vouw: met voorrang laden. */
+  highPriority?: boolean;
+}) {
   const soldOut = product.stock.status === "out";
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-md border border-line bg-white transition-[border-color,box-shadow] duration-200 hover:border-line-strong hover:shadow-card">
@@ -17,7 +26,8 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             src={product.image.url}
             alt={product.image.alt}
             fill
-            priority={priority}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={highPriority ? "high" : "auto"}
             sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 22vw, (min-width: 640px) 30vw, 48vw"
             className={`object-contain transition-transform duration-300 group-hover:scale-[1.03] ${soldOut ? "opacity-60" : ""}`}
           />
@@ -53,7 +63,7 @@ export function ProductGrid({ products, className = "" }: { products: ProductCar
     <ul className={`grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 ${className}`}>
       {products.map((p, i) => (
         <li key={p.id}>
-          <ProductCard product={p} priority={i < 4} />
+          <ProductCard product={p} priority={i < 4} highPriority={i < 2} />
         </li>
       ))}
     </ul>

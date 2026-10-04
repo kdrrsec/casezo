@@ -1,11 +1,27 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl } from "@/lib/site";
+
 export type Crumb = { label: string; href?: string };
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const all: Crumb[] = [{ label: "Home", href: "/" }, ...items];
   return (
+    <>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: all.map((item, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: item.label,
+          ...(item.href ? { item: absoluteUrl(item.href) } : {}),
+        })),
+      }}
+    />
     <nav aria-label="Kruimelpad" className="text-sm text-muted">
       <ol className="flex flex-wrap items-center gap-1">
         {all.map((item, i) => {
@@ -27,5 +43,6 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
         })}
       </ol>
     </nav>
+    </>
   );
 }
