@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore } from "react";
 
 import { getDevice } from "@/lib/catalog/devices";
 import type { Device } from "@/lib/catalog/types";
@@ -19,6 +19,10 @@ type DeviceContextValue = {
   availableIds: string[];
   setDevice: (id: string) => void;
   clearDevice: () => void;
+  /** Toestelkiezer (dialoog) openen of sluiten. */
+  pickerOpen: boolean;
+  openPicker: () => void;
+  closePicker: () => void;
 };
 
 const DeviceContext = createContext<DeviceContextValue | null>(null);
@@ -57,12 +61,16 @@ export function DeviceProvider({ availableIds, children }: { availableIds: strin
   const storedId = useSyncExternalStore(subscribe, read, () => null);
   const device = storedId && availableIds.includes(storedId) ? (getDevice(storedId) ?? null) : null;
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   const setDevice = useCallback((id: string) => write(id), []);
   const clearDevice = useCallback(() => write(null), []);
+  const openPicker = useCallback(() => setPickerOpen(true), []);
+  const closePicker = useCallback(() => setPickerOpen(false), []);
 
   const value = useMemo(
-    () => ({ device, availableIds, setDevice, clearDevice }),
-    [device, availableIds, setDevice, clearDevice],
+    () => ({ device, availableIds, setDevice, clearDevice, pickerOpen, openPicker, closePicker }),
+    [device, availableIds, setDevice, clearDevice, pickerOpen, openPicker, closePicker],
   );
   return <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>;
 }

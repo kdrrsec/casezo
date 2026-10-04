@@ -1,7 +1,6 @@
 "use client";
 
 import { Check, CircleAlert, Minus, Plus, ShoppingBag, Smartphone } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,7 +10,7 @@ import { stockState } from "@/lib/catalog/cards";
 import { colorSlug } from "@/lib/catalog/colors";
 import { describeRequirements, isCompatible } from "@/lib/catalog/compatibility";
 import { getDevice } from "@/lib/catalog/devices";
-import { COLOR_OPTION, DEVICE_OPTION, type Product, type ProductImage } from "@/lib/catalog/types";
+import { COLOR_OPTION, DEVICE_OPTION, type Product } from "@/lib/catalog/types";
 import {
   deviceOptionValue,
   findVariant,
@@ -23,6 +22,7 @@ import {
 import { MAX_LINE_QUANTITY } from "@/lib/cart/types";
 
 import { Price } from "./price";
+import { ProductGallery } from "./product-gallery";
 import { StockLabel } from "./stock-label";
 
 /**
@@ -115,7 +115,7 @@ export function ProductMain({
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-10">
-      <Gallery
+      <ProductGallery
         key={images[0]?.url ?? "leeg"}
         images={images}
         title={product.title}
@@ -340,60 +340,6 @@ function QuantityInput({
       >
         <Plus className="size-4" strokeWidth={2} aria-hidden />
       </button>
-    </div>
-  );
-}
-
-function Gallery({
-  images,
-  title,
-  illustrative,
-}: {
-  images: ProductImage[];
-  title: string;
-  illustrative: boolean;
-}) {
-  const [active, setActive] = useState(0);
-  const current = images[active] ?? images[0];
-
-  if (!current) {
-    return <div className="aspect-square rounded-md border border-line bg-surface" aria-label={`Geen foto van ${title}`} />;
-  }
-
-  return (
-    <div className="flex flex-col-reverse gap-3 sm:flex-row lg:sticky lg:top-4 lg:self-start">
-      {images.length > 1 && (
-        <ul className="flex gap-2 sm:flex-col" aria-label="Productfoto's">
-          {images.map((img, i) => (
-            <li key={img.url}>
-              <button
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`Toon foto ${i + 1} van ${images.length}`}
-                aria-current={i === active}
-                className={`relative block size-16 overflow-hidden rounded border bg-surface sm:size-20 ${
-                  i === active ? "border-primary ring-1 ring-primary" : "border-line hover:border-line-strong"
-                }`}
-              >
-                <Image src={img.url} alt="" fill sizes="80px" className="object-contain" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="relative aspect-square flex-1 overflow-hidden rounded-md border border-line bg-surface">
-        <Image
-          src={current.url}
-          alt={current.alt}
-          fill
-          priority
-          sizes="(min-width: 1024px) 45vw, 100vw"
-          className="object-contain"
-        />
-        {illustrative && (
-          <p className="absolute right-3 bottom-2 text-xs text-muted">Afbeelding ter illustratie</p>
-        )}
-      </div>
     </div>
   );
 }

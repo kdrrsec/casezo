@@ -1,3 +1,4 @@
+import { Magnet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,8 +8,9 @@ import { Price } from "./price";
 import { StockLabel } from "./stock-label";
 
 export function ProductCard({ product, priority = false }: { product: ProductCardData; priority?: boolean }) {
+  const soldOut = product.stock.status === "out";
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-md border border-line bg-white transition-colors hover:border-line-strong">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-md border border-line bg-white transition-[border-color,box-shadow] duration-200 hover:border-line-strong hover:shadow-card">
       <div className="relative aspect-square bg-surface">
         {product.image && (
           <Image
@@ -17,21 +19,27 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             fill
             priority={priority}
             sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 22vw, (min-width: 640px) 30vw, 48vw"
-            className="object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+            className={`object-contain transition-transform duration-300 group-hover:scale-[1.03] ${soldOut ? "opacity-60" : ""}`}
           />
         )}
+        {product.magsafe && (
+          <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-0.5 text-[11px] font-semibold text-ink shadow-card">
+            <Magnet className="size-3 text-primary" strokeWidth={2.25} aria-hidden />
+            MagSafe
+          </span>
+        )}
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-3.5">
+      <div className="flex flex-1 flex-col p-3 sm:p-3.5">
         <p className="text-xs font-semibold tracking-wide text-muted uppercase">{product.brand}</p>
-        <h3 className="line-clamp-2 text-sm leading-snug font-semibold text-ink sm:text-[0.9375rem]">
+        <h3 className="mt-1 line-clamp-2 min-h-[2.5em] text-sm leading-[1.25] font-semibold text-ink sm:text-[0.9375rem]">
           <Link href={product.href} className="after:absolute after:inset-0 hover:text-primary">
             {product.title}
           </Link>
         </h3>
-        {product.compatibility && (
-          <p className="line-clamp-1 text-xs text-ink-soft sm:text-[0.8125rem]">{product.compatibility}</p>
-        )}
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-2 gap-y-1 pt-2">
+        <p className="mt-1 line-clamp-1 min-h-[1.4em] text-xs text-ink-soft sm:text-[0.8125rem]">
+          {product.compatibility}
+        </p>
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-2 gap-y-1 pt-3">
           <Price amount={product.price} from={product.priceFrom} compareAt={product.compareAtPrice} />
           <StockLabel stock={product.stock} />
         </div>

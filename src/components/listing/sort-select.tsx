@@ -1,15 +1,14 @@
 "use client";
 
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
 
 import type { ListingResult } from "@/lib/catalog/listing";
 
+import { useListingTransition } from "./listing-transition";
+
 /** Sorteerkeuze als native select: op mobiel opent de vertrouwde systeemkiezer. */
 export function SortSelect({ sort }: { sort: ListingResult["sort"] }) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const { pending, navigate } = useListingTransition();
   const current = sort.options.find((o) => o.value === sort.current);
 
   return (
@@ -28,7 +27,7 @@ export function SortSelect({ sort }: { sort: ListingResult["sort"] }) {
         id="sorteren"
         value={current?.href}
         disabled={pending}
-        onChange={(event) => startTransition(() => router.push(event.target.value, { scroll: false }))}
+        onChange={(event) => navigate(event.target.value)}
         className="h-10 w-full appearance-none rounded-md border border-line-strong bg-white pr-9 pl-3 text-sm font-medium text-transparent focus:border-primary focus:outline-none sm:w-auto sm:text-ink"
       >
         {sort.options.map((o) => (

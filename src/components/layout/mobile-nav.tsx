@@ -12,7 +12,7 @@ import type { MenuItem } from "@/lib/navigation";
 export function MobileNav({ items }: { items: MenuItem[] }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const { device } = useDevice();
+  const { device, openPicker } = useDevice();
 
   const open = () => dialogRef.current?.showModal();
   const close = () => dialogRef.current?.close();
@@ -66,6 +66,21 @@ export function MobileNav({ items }: { items: MenuItem[] }) {
                   </strong>
                 </span>
               </Link>
+            )}
+            {!device && (
+              <button
+                type="button"
+                onClick={() => {
+                  close();
+                  openPicker();
+                }}
+                className="flex w-full items-center gap-3 border-b border-line bg-primary-soft px-4 py-3 text-left text-sm"
+              >
+                <Smartphone className="size-5 text-primary" strokeWidth={1.75} aria-hidden />
+                <span>
+                  <strong>Kies je toestel</strong> en zie direct wat past
+                </span>
+              </button>
             )}
             <ul>
               {items.map((item) => {

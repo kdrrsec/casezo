@@ -1,5 +1,4 @@
 import { SearchX, X } from "lucide-react";
-import Link from "next/link";
 
 import { ProductGrid } from "@/components/product/product-card";
 import { Breadcrumbs, type Crumb } from "@/components/ui/breadcrumbs";
@@ -7,8 +6,10 @@ import type { ListingResult } from "@/lib/catalog/listing";
 
 import { DeviceHint } from "./device-hint";
 import { FilterPanel } from "./filter-panel";
+import { ListingResults, ListingTransitionProvider } from "./listing-transition";
 import { MobileFilters } from "./mobile-filters";
 import { SortSelect } from "./sort-select";
+import { TransitionLink } from "./transition-link";
 
 /**
  * Standaard productoverzicht: kruimels, titel met aantal, filters links,
@@ -34,6 +35,7 @@ export function ListingView({
   showDeviceHint?: boolean;
 }) {
   return (
+    <ListingTransitionProvider>
     <div className="container-shop pt-4 pb-8 lg:pt-6">
       <Breadcrumbs items={breadcrumbs} />
 
@@ -73,17 +75,20 @@ export function ListingView({
             </div>
           )}
 
-          {result.items.length > 0 ? (
-            <>
-              <ProductGrid products={result.items} className="xl:grid-cols-4" />
-              {result.pageCount > 1 && <Pagination result={result} />}
-            </>
-          ) : (
-            <EmptyState result={result} basePath={basePath} />
-          )}
+          <ListingResults>
+            {result.items.length > 0 ? (
+              <>
+                <ProductGrid products={result.items} className="xl:grid-cols-4" />
+                {result.pageCount > 1 && <Pagination result={result} />}
+              </>
+            ) : (
+              <EmptyState result={result} basePath={basePath} />
+            )}
+          </ListingResults>
         </section>
       </div>
     </div>
+    </ListingTransitionProvider>
   );
 }
 
@@ -92,21 +97,21 @@ function ActiveChips({ result }: { result: ListingResult }) {
   return (
     <>
       {result.chips.map((chip) => (
-        <Link
+        <TransitionLink
           key={chip.href + chip.label}
           href={chip.href}
-          scroll={false}
+         
           className="inline-flex items-center gap-1.5 rounded-full border border-primary-line bg-primary-soft py-1 pr-2 pl-3 text-sm text-ink hover:border-primary"
           aria-label={`Filter verwijderen: ${chip.label}`}
         >
           {chip.label}
           <X className="size-3.5 text-primary" strokeWidth={2.25} aria-hidden />
-        </Link>
+        </TransitionLink>
       ))}
       {result.clearHref && (
-        <Link href={result.clearHref} scroll={false} className="px-1 text-sm font-medium text-primary hover:underline">
+        <TransitionLink href={result.clearHref} className="px-1 text-sm font-medium text-primary hover:underline">
           Wis filters
-        </Link>
+        </TransitionLink>
       )}
     </>
   );
@@ -118,7 +123,7 @@ function Pagination({ result }: { result: ListingResult }) {
       <ul className="flex flex-wrap gap-1">
         {result.pages.map((p) => (
           <li key={p.page}>
-            <Link
+            <TransitionLink
               href={p.href}
               aria-current={p.page === result.page ? "page" : undefined}
               className={`flex size-10 items-center justify-center rounded-md border text-sm font-semibold ${
@@ -128,7 +133,7 @@ function Pagination({ result }: { result: ListingResult }) {
               }`}
             >
               {p.page}
-            </Link>
+            </TransitionLink>
           </li>
         ))}
       </ul>
@@ -153,18 +158,18 @@ function EmptyState({ result, basePath }: { result: ListingResult; basePath: str
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         {lastChip && result.chips.length > 1 && (
-          <Link href={lastChip.href} scroll={false} className="btn btn-secondary">
+          <TransitionLink href={lastChip.href} className="btn btn-secondary">
             Laatste filter verwijderen
-          </Link>
+          </TransitionLink>
         )}
         {result.clearHref ? (
-          <Link href={result.clearHref} scroll={false} className="btn btn-primary">
+          <TransitionLink href={result.clearHref} className="btn btn-primary">
             Wis alle filters
-          </Link>
+          </TransitionLink>
         ) : (
-          <Link href={basePath === "/zoeken" ? "/" : basePath} className="btn btn-primary">
+          <TransitionLink href={basePath === "/zoeken" ? "/" : basePath} className="btn btn-primary">
             {basePath === "/zoeken" ? "Bekijk het assortiment" : "Toon alle producten"}
-          </Link>
+          </TransitionLink>
         )}
       </div>
     </div>

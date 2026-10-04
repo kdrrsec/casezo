@@ -3,8 +3,10 @@ import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
 
-import { AddedNotice } from "@/components/cart/added-notice";
+import { CartDrawer } from "@/components/cart/cart-drawer";
+import { DevicePicker } from "@/components/device/device-picker";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { NavigationProgress } from "@/components/layout/navigation-progress";
 import { SiteHeader } from "@/components/layout/site-header";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { DeviceProvider } from "@/components/providers/device-provider";
@@ -31,6 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="nl">
       <body className="flex min-h-dvh flex-col">
+        <NavigationProgress />
         <DeviceProvider availableIds={availableDevices.map((d) => d.id)}>
           <CartProvider>
             <SiteHeader menu={menu} />
@@ -38,7 +41,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               {children}
             </main>
             <SiteFooter />
-            <AddedNotice />
+            <CartDrawer />
+            <DevicePicker />
           </CartProvider>
         </DeviceProvider>
       </body>

@@ -1,10 +1,11 @@
 "use client";
 
 import { Check, ChevronDown } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import type { Facet, FacetOption, PriceRangeForm } from "@/lib/catalog/listing";
+
+import { useListingTransition } from "./listing-transition";
 
 const VISIBLE_OPTIONS = 8;
 
@@ -24,13 +25,10 @@ export function FilterPanel({
   basePath: string;
   idPrefix: string;
 }) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
-
-  const go = (href: string) => startTransition(() => router.push(href, { scroll: false }));
+  const { navigate: go } = useListingTransition();
 
   return (
-    <div aria-busy={pending} className={pending ? "opacity-70 transition-opacity" : "transition-opacity"}>
+    <div>
       {facets.map((facet) => (
         <FacetSection key={facet.key} facet={facet} idPrefix={idPrefix} onSelect={go}>
           {facet.key === "prijs" && (

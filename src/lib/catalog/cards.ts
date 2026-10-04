@@ -15,6 +15,8 @@ export type ProductCardData = {
   compareAtPrice?: Cents;
   stock: StockState;
   compatibility: string;
+  /** Toont een MagSafe-label op de kaart. */
+  magsafe: boolean;
 };
 
 export type StockState = { status: "in" | "low" | "out"; label: string };
@@ -64,5 +66,6 @@ export function toCardData(product: Product, options: CardOptions = {}): Product
     compareAtPrice: variants.find((v) => v.price === minPrice)?.compareAtPrice,
     stock: stockState(variants),
     compatibility: compatibilitySummary(product, options.deviceId),
+    magsafe: product.magsafe === true,
   };
 }

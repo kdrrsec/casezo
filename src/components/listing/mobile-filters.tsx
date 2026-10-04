@@ -1,12 +1,12 @@
 "use client";
 
 import { SlidersHorizontal, X } from "lucide-react";
-import Link from "next/link";
 import { useRef } from "react";
 
 import type { ListingResult } from "@/lib/catalog/listing";
 
 import { FilterPanel } from "./filter-panel";
+import { TransitionLink } from "./transition-link";
 
 /** Filterpaneel voor kleine schermen, als zijpaneel over de pagina. */
 export function MobileFilters({ result, basePath }: { result: ListingResult; basePath: string }) {
@@ -58,9 +58,9 @@ export function MobileFilters({ result, basePath }: { result: ListingResult; bas
           </div>
           <div className="grid grid-cols-2 gap-2 border-t border-line p-4">
             {result.clearHref ? (
-              <Link href={result.clearHref} scroll={false} className="btn btn-secondary">
+              <TransitionLink href={result.clearHref} className="btn btn-secondary">
                 Wis filters
-              </Link>
+              </TransitionLink>
             ) : (
               <span />
             )}

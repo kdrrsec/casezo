@@ -8,6 +8,10 @@ type AddedNotice = { line: CartLine; quantity: number; at: number };
 
 type CartContextValue = {
   cart: Cart | null;
+  /** Mini-winkelmand die van rechts inschuift. */
+  drawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
   /** True zolang een wijziging onderweg is. */
   pending: boolean;
   error: string | null;
@@ -38,12 +42,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState<AddedNotice | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
     send()
-      .then((res) => active && setCart(res.cart))
-      .catch((e: Error) => active && setError(e.message));
+      .then((res) => {
+        if (active) setCart(res.cart);
+      })
+      .catch((e: Error) => {
+        if (active) setError(e.message);
+      });
     return () => {
       active = false;
     };
@@ -69,7 +78,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     async (variantId: string, quantity: number) => {
       const res = await run({ type: "add", variantId, quantity });
       const line = res?.cart.lines.find((l) => l.variantId === variantId);
-      if (res && line) setAdded({ line, quantity, at: Date.now() });
+      if (res && line) {
+        setAdded({ line, quantity, at: Date.now() });
+        setDrawerOpen(true);
+      }
       return Boolean(res && line && !res.error);
     },
     [run],
@@ -89,19 +101,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [run],
   );
 
+  const openDrawer = useCallback(() => setDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const dismissAdded = useCallback(() => setAdded(null), []);
+  const clearError = useCallback(() => setError(null), []);
+
   const value = useMemo(
     () => ({
       cart,
+      drawerOpen,
+      openDrawer,
+      closeDrawer,
       pending,
       error,
       added,
       addItem,
       updateLine,
       removeLine,
-      dismissAdded: () => setAdded(null),
-      clearError: () => setError(null),
+      dismissAdded,
+      clearError,
     }),
-    [cart, pending, error, added, addItem, updateLine, removeLine],
+    [cart, drawerOpen, openDrawer, closeDrawer, pending, error, added, addItem, updateLine, removeLine, dismissAdded, clearError],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

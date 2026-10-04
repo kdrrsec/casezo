@@ -75,6 +75,19 @@ export default async function HomePage() {
             </h2>
           </div>
           <DeviceSelector />
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-4 text-sm">
+            <span className="text-muted">Direct naar:</span>
+            {deviceMenu.map(({ brand }) => (
+              <Link
+                key={brand.slug}
+                href={`/toestel/${brand.slug}`}
+                className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+              >
+                Alle {brand.name}-accessoires
+                <ArrowRight className="size-3.5" strokeWidth={2} aria-hidden />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -123,42 +136,7 @@ export default async function HomePage() {
         <ProductGrid products={featured} className="lg:grid-cols-4" />
       </section>
 
-      {/* 5. Snelle links per telefoonmerk */}
-      <section aria-labelledby="per-merk" className="bg-surface py-10 lg:py-12">
-        <div className="container-shop">
-          <h2 id="per-merk" className="mb-4 text-xl font-bold tracking-tight">
-            Accessoires per telefoonmerk
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {deviceMenu.map(({ brand, series }) => (
-              <div key={brand.slug} className="rounded-md border border-line bg-white p-5">
-                <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-lg font-bold">{brand.name}</h3>
-                  <Link href={`/toestel/${brand.slug}`} className="text-sm font-semibold text-primary hover:underline">
-                    Alle {brand.name}-accessoires
-                  </Link>
-                </div>
-                <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3">
-                  {series
-                    .flatMap((s) => s.devices)
-                    .map((d) => (
-                      <li key={d.id}>
-                        <Link
-                          href={`/toestel/${brand.slug}/${d.id}`}
-                          className="block py-1 text-sm text-ink-soft hover:text-primary hover:underline"
-                        >
-                          {d.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Merken */}
+      {/* 5. Merken */}
       <section aria-labelledby="merken" className="container-shop">
         <div className="mb-4 flex items-baseline justify-between gap-4">
           <h2 id="merken" className="text-xl font-bold tracking-tight">
@@ -168,22 +146,21 @@ export default async function HomePage() {
             Alle merken
           </Link>
         </div>
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-3">
+        <ul className="flex flex-wrap gap-2.5">
           {brands.map((b) => (
             <li key={b.slug}>
               <Link
                 href={`/merk/${b.slug}`}
-                className="flex h-20 flex-col items-center justify-center rounded-md border border-line bg-white px-3 text-center hover:border-primary"
+                className="block rounded-full border border-line bg-white px-5 py-2.5 text-[0.9375rem] font-semibold tracking-tight text-ink transition-colors hover:border-primary hover:text-primary"
               >
-                <span className="text-lg font-bold tracking-tight">{b.name}</span>
-                <span className="text-xs text-muted">{b.productCount} producten</span>
+                {b.name}
               </Link>
             </li>
           ))}
         </ul>
       </section>
 
-      {/* 7. Over Casezo */}
+      {/* 6. Over Casezo */}
       <section aria-labelledby="over" className="container-shop">
         <div className="grid gap-8 rounded-lg border border-line p-6 lg:grid-cols-[1fr_2fr] lg:p-8">
           <div>

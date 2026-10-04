@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { SaveDeviceButton } from "@/components/device/save-device-button";
 import { ListingView } from "@/components/listing/listing-view";
+import { TransitionLink } from "@/components/listing/transition-link";
 import {
   categories,
   getDevice,
@@ -76,16 +76,15 @@ export default async function DevicePage({ params, searchParams }: PageProps<"/t
           <nav aria-label="Categorieën voor dit toestel">
             <ul className="flex gap-2 overflow-x-auto pb-1">
               <li>
-                <Link
+                <TransitionLink
                   href={basePath}
-                  scroll={false}
                   aria-current={!activeCategory ? "page" : undefined}
                   className={`block rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap ${
                     !activeCategory ? "border-primary bg-primary text-white" : "border-line-strong bg-white hover:border-ink-soft"
                   }`}
                 >
                   Alles
-                </Link>
+                </TransitionLink>
               </li>
               {categories
                 .filter((c) => counts[c.slug] > 0)
@@ -93,16 +92,15 @@ export default async function DevicePage({ params, searchParams }: PageProps<"/t
                   const active = activeCategory === c.slug;
                   return (
                     <li key={c.slug}>
-                      <Link
+                      <TransitionLink
                         href={`${basePath}?categorie=${c.slug}`}
-                        scroll={false}
                         aria-current={active ? "page" : undefined}
                         className={`block rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap ${
                           active ? "border-primary bg-primary text-white" : "border-line-strong bg-white hover:border-ink-soft"
                         }`}
                       >
                         {c.name} <span className={active ? "text-white/80" : "text-muted"}>({counts[c.slug]})</span>
-                      </Link>
+                      </TransitionLink>
                     </li>
                   );
                 })}
