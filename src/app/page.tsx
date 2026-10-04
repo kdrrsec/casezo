@@ -2,6 +2,8 @@ import { ArrowRight, PackageCheck, ShieldCheck, Smartphone } from "lucide-react"
 import Image from "next/image";
 import Link from "next/link";
 
+import heroImage from "../../public/brand/hero-accessoires.webp";
+
 import { DeviceSelector } from "@/components/device/device-selector";
 import { ProductGrid } from "@/components/product/product-card";
 import {
@@ -30,8 +32,8 @@ export default async function HomePage() {
     <div className="space-y-12 pb-4 lg:space-y-16">
       {/* 1. Promotiebanner */}
       <section className="container-shop pt-4 lg:pt-6">
-        <div className="grid items-center overflow-hidden rounded-lg bg-[#e8f1f3] md:grid-cols-[1fr_1.15fr]">
-          <div className="px-6 py-8 lg:px-12 lg:py-10">
+        <div className="grid items-center overflow-hidden rounded-lg bg-[#e8f1f3] md:grid-cols-[0.85fr_1.15fr]">
+          <div className="px-6 pt-8 md:py-10 lg:px-12">
             <p className="text-sm font-semibold tracking-wide text-primary uppercase">Hoesjes en accessoires</p>
             <h1 className="mt-2 text-[1.75rem] leading-tight font-bold tracking-tight text-ink sm:text-[2.125rem]">
               Accessoires die bij jouw telefoon passen
@@ -49,14 +51,13 @@ export default async function HomePage() {
               </a>
             </div>
           </div>
-          <div className="relative aspect-[14/9] w-full">
+          <div className="px-4 pt-4 pb-6 md:py-8 md:pr-8 md:pl-0">
             <Image
-              src="/products/hero.webp"
-              alt="Telefoonhoesjes in verschillende kleuren en materialen"
-              fill
+              src={heroImage}
+              alt="Telefoonhoesjes, screenprotector, oplader, autohouder, autolader, kabel en oordopjes"
               priority
-              sizes="(min-width: 768px) 55vw, 100vw"
-              className="object-cover"
+              sizes="(min-width: 1280px) 720px, (min-width: 768px) 58vw, 100vw"
+              className="h-auto w-full"
             />
           </div>
         </div>

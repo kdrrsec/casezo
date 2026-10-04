@@ -999,24 +999,6 @@ function build({ kind, brand = "apple", color = "#1f2226", view = 1 }) {
       obj = powerbank(color, { slim: true, lightning: true });
       pose = { rotation: [0.08, view === 1 ? -0.45 : 0.6, 0.02] };
       break;
-    case "hero": {
-      // Samenstelling voor de homepage: een rij hoesjes, licht gewaaierd.
-      obj = new THREE.Group();
-      const items = [
-        { kind: "silicone", color: "#1f2f54", x: -150, z: -40, ry: -0.5 },
-        { kind: "leather", color: "#9a5a2c", x: -55, z: 10, ry: -0.42 },
-        { kind: "clear", color: "#dfe6ee", x: 45, z: 40, ry: -0.34 },
-        { kind: "silicone", color: "#a3b39a", x: 145, z: 0, ry: -0.26 },
-      ];
-      for (const it of items) {
-        const c = phoneCase(it.kind, "apple", it.color, { magsafe: true });
-        c.position.set(it.x, 0, it.z);
-        c.rotation.set(0.04, it.ry, 0.02);
-        obj.add(c);
-      }
-      pose = { rotation: [0, 0.12, 0] };
-      break;
-    }
     default:
       obj = new THREE.Mesh(new THREE.BoxGeometry(40, 40, 40), M.plastic(color));
   }
