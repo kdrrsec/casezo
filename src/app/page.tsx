@@ -56,6 +56,7 @@ export default async function HomePage() {
               src={heroImage}
               alt="Telefoonhoesjes, screenprotector, oplader, autohouder, autolader, kabel en oordopjes"
               priority
+              quality={90}
               sizes="(min-width: 1280px) 720px, (min-width: 768px) 58vw, 100vw"
               className="h-auto w-full"
             />
