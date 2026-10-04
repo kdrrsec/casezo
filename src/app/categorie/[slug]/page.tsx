@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ListingView } from "@/components/listing/listing-view";
+import { categoryImages, categoryTints } from "@/config/category-images";
 import { categories, getCategory, getListing } from "@/lib/catalog";
 
 export function generateStaticParams() {
@@ -31,6 +32,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps<"
       description={category.description}
       breadcrumbs={[{ label: category.name }]}
       showDeviceHint
+      banner={{ image: categoryImages[category.slug], tint: categoryTints[category.slug] }}
     />
   );
 }

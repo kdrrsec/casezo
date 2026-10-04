@@ -1,4 +1,5 @@
 import { SearchX, X } from "lucide-react";
+import Image, { type StaticImageData } from "next/image";
 
 import { ProductGrid } from "@/components/product/product-card";
 import { Breadcrumbs, type Crumb } from "@/components/ui/breadcrumbs";
@@ -23,6 +24,7 @@ export function ListingView({
   breadcrumbs,
   intro,
   showDeviceHint = false,
+  banner,
 }: {
   result: ListingResult;
   basePath: string;
@@ -33,21 +35,41 @@ export function ListingView({
   intro?: React.ReactNode;
   /** Toon de suggestie om op het eigen toestel te filteren. */
   showDeviceHint?: boolean;
+  /** Gekleurde paginakop met beeld, bv. voor categorieën. */
+  banner?: { image: StaticImageData; tint: string };
 }) {
+  const heading = (
+    <>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h1 className="text-2xl font-extrabold tracking-tight lg:text-[2rem]">{title}</h1>
+        <p className="text-sm text-ink-soft" aria-live="polite">
+          {result.total} {result.total === 1 ? "product" : "producten"}
+        </p>
+      </div>
+      {description && <p className="mt-1.5 max-w-3xl text-[0.9375rem] text-ink-soft">{description}</p>}
+    </>
+  );
   return (
     <ListingTransitionProvider>
     <div className="container-shop pt-4 pb-8 lg:pt-6">
       <Breadcrumbs items={breadcrumbs} />
 
-      <header className="mt-3 mb-5 lg:mb-6">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h1 className="text-2xl font-bold tracking-tight lg:text-[1.75rem]">{title}</h1>
-          <p className="text-sm text-muted" aria-live="polite">
-            {result.total} {result.total === 1 ? "product" : "producten"}
-          </p>
-        </div>
-        {description && <p className="mt-1.5 max-w-3xl text-[0.9375rem] text-ink-soft">{description}</p>}
-      </header>
+      {banner ? (
+        <header
+          className="relative mt-3 mb-6 flex min-h-32 items-center overflow-hidden rounded-3xl px-6 py-6 sm:min-h-40 sm:pr-64 lg:mb-8 lg:px-10"
+          style={{ backgroundColor: banner.tint }}
+        >
+          <div className="relative z-10 max-w-[70%] sm:max-w-none">{heading}</div>
+          <Image
+            src={banner.image}
+            alt=""
+            sizes="(min-width: 640px) 240px, 140px"
+            className="absolute top-0 -right-4 h-full w-36 [mask-image:linear-gradient(to_right,transparent,black_30%)] object-cover object-top mix-blend-multiply sm:right-0 sm:w-64"
+          />
+        </header>
+      ) : (
+        <header className="mt-3 mb-5 lg:mb-6">{heading}</header>
+      )}
 
       {intro}
 

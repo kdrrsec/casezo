@@ -17,3 +17,13 @@ export const categoryImages: Record<CategorySlug, StaticImageData> = {
   houders,
   powerbanks,
 };
+
+/** Zachte achtergrondtint per categorie, voor tegels en paginakoppen. */
+export const categoryTints: Record<CategorySlug, string> = {
+  telefoonhoesjes: "#dff1f4",
+  screenprotectors: "#e6e9fb",
+  opladers: "#ffeedb",
+  kabels: "#e3f3e8",
+  houders: "#fbe6ea",
+  powerbanks: "#ece6fb",
+};

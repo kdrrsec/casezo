@@ -1,6 +1,6 @@
-import "@fontsource-variable/inter";
 import "./globals.css";
 
+import localFont from "next/font/local";
 import type { Metadata, Viewport } from "next";
 
 import { CartDrawer } from "@/components/cart/cart-drawer";
@@ -14,6 +14,14 @@ import { storeConfig } from "@/config/store";
 import { getDevicesWithProducts } from "@/lib/catalog";
 import { getMainMenu } from "@/lib/navigation";
 import { siteUrl } from "@/lib/site";
+
+/** Inter (variabel), lokaal geladen met aangepaste terugvalmaten: geen verspringende tekst. */
+const inter = localFont({
+  src: "./fonts/inter-latin.woff2",
+  weight: "100 900",
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -40,7 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const [menu, availableDevices] = await Promise.all([getMainMenu(), getDevicesWithProducts()]);
 
   return (
-    <html lang="nl">
+    <html lang="nl" className={inter.variable}>
       <body className="flex min-h-dvh flex-col">
         <NavigationProgress />
         <DeviceProvider availableIds={availableDevices.map((d) => d.id)}>

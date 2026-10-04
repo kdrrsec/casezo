@@ -1,5 +1,5 @@
 import { compatibilitySummary } from "./compatibility";
-import type { Cents, Product, ProductImage, ProductVariant } from "./types";
+import type { Cents, ColorValue, Product, ProductImage, ProductVariant } from "./types";
 
 /** Serialiseerbare gegevens voor een productkaart. */
 export type ProductCardData = {
@@ -17,6 +17,8 @@ export type ProductCardData = {
   compatibility: string;
   /** Toont een MagSafe-label op de kaart. */
   magsafe: boolean;
+  /** Beschikbare kleuren van het product, voor de kleurstalen op de kaart. */
+  colors: ColorValue[];
 };
 
 export type StockState = { status: "in" | "low" | "out"; label: string };
@@ -67,5 +69,12 @@ export function toCardData(product: Product, options: CardOptions = {}): Product
     stock: stockState(variants),
     compatibility: compatibilitySummary(product, options.deviceId),
     magsafe: product.magsafe === true,
+    colors: uniqueColors(product.variants),
   };
+}
+
+function uniqueColors(variants: ProductVariant[]): ColorValue[] {
+  const seen = new Map<string, ColorValue>();
+  for (const v of variants) if (v.color && !seen.has(v.color.name)) seen.set(v.color.name, v.color);
+  return [...seen.values()];
 }
