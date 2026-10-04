@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import heroImage from "../../public/brand/hero-accessoires.webp";
 
+import { categoryImages } from "@/config/category-images";
 import { DeviceSelector } from "@/components/device/device-selector";
 import { ProductGrid } from "@/components/product/product-card";
 import {
@@ -22,11 +23,11 @@ export default async function HomePage() {
     getProductBrands(),
   ]);
 
-  const categoryTiles = categories.map((category) => {
-    const inCategory = products.filter((p) => p.category === category.slug);
-    const lead = inCategory.find((p) => p.featured) ?? inCategory[0];
-    return { category, count: inCategory.length, image: lead?.images[0] };
-  });
+  const categoryTiles = categories.map((category) => ({
+    category,
+    count: products.filter((p) => p.category === category.slug).length,
+    image: categoryImages[category.slug],
+  }));
 
   return (
     <div className="space-y-12 pb-4 lg:space-y-16">
@@ -89,16 +90,15 @@ export default async function HomePage() {
                 href={`/categorie/${category.slug}`}
                 className="group flex h-full flex-col overflow-hidden rounded-md border border-line bg-white hover:border-primary"
               >
-                <div className="relative aspect-[4/3] bg-surface">
-                  {image && (
-                    <Image
-                      src={image.url}
-                      alt=""
-                      fill
-                      sizes="(min-width: 1024px) 15vw, (min-width: 640px) 30vw, 45vw"
-                      className="object-contain transition-transform group-hover:scale-[1.03]"
-                    />
-                  )}
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#f9f9f9]">
+                  <Image
+                    src={image}
+                    alt=""
+                    fill
+                    quality={90}
+                    sizes="(min-width: 1280px) 200px, (min-width: 1024px) 16vw, (min-width: 640px) 30vw, 48vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div className="px-3 py-2.5">
                   <span className="block font-semibold group-hover:text-primary">{category.name}</span>
